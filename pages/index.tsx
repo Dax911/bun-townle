@@ -1,9 +1,19 @@
 import Head from "next/head";
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "../styles/Home.module.css";
 import nextPackage from "next/package.json";
+import { getWordlist } from "utils/words";
 
 export default function Home({}) {
+  const [randWord, setRandWord] = React.useState("");
+
+  useEffect(() => {
+    const listofWords = getWordlist();
+    setRandWord(listofWords[Math.floor(Math.random() * listofWords.length)]);
+  }
+  , []);
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -21,7 +31,15 @@ export default function Home({}) {
         <p className={styles.description}>
           Get started by editing{" "}
           <code className={styles.code}>pages/index.tsx</code>
+
         </p>
+        <br />
+        <p className={styles.description}>
+          Here is a random word from the word list:{" "}
+          <code className={styles.code}>{randWord}</code>
+        </p>
+
+
       </main>
     </div>
   );
