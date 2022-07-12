@@ -1,18 +1,21 @@
 import Head from "next/head";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
-import nextPackage from "next/package.json";
 import { getWordlist } from "utils/words";
 
-export default function Home({}) {
-  const [randWord, setRandWord] = React.useState("");
+export const getServerSideProps = async () => {
+  const listofWords = getWordlist();
+  const randWord = listofWords[Math.floor(Math.random() * listofWords.length)];
 
-  useEffect(() => {
-    const listofWords = getWordlist();
-    setRandWord(listofWords[Math.floor(Math.random() * listofWords.length)]);
-  }
-  , []);
+  return {
+    props: {
+      randWord,
+    },
+  };
+}
 
+export default function Home({randWord}) {
+    
 
   return (
     <div className={styles.container}>
@@ -24,15 +27,10 @@ export default function Home({}) {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a> v
-          {nextPackage.version}
+          Welcome to Town<a href="https://nextjs.org">le</a>
         </h1>
 
-        <p className={styles.description}>
-          Get started by editing{" "}
-          <code className={styles.code}>pages/index.tsx</code>
 
-        </p>
         <br />
         <p className={styles.description}>
           Here is a random word from the word list:{" "}

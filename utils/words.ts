@@ -9,6 +9,10 @@ const wordlists = {
         'Keiv',
         'Oslo',
         'Omsk',
+        'Reno',
+        'Erie',
+        'Yuma',
+        'Mesa'
     ],
     5: [
         'China',
