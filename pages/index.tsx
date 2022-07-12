@@ -27,7 +27,7 @@ export default function Home({randWord}) {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to Town<a href="https://nextjs.org">le</a>
+          Welcome to Town<a href="https://wordleunlimited.org/">le</a>
         </h1>
 
 
