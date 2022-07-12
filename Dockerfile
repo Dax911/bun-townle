@@ -1,39 +1,16 @@
-ARG BUN_VERSION='0.1.3'
-  ARG GLIBC_VERSION='2.34-r0'
+FROM frolvlad/alpine-glibc:glibc-2.30
 
+WORKDIR /bun
+RUN apk --no-cache add curl bash libstdc++ ca-certificates && \
+    curl -fsSL -o "/bun/bun.zip" "https://github.com/Jarred-Sumner/bun/releases/download/bun-v0.1.3/bun-linux-x64.zip" && \
+    unzip -d /bun -q -o "/bun/bun.zip" && \
+    mv /bun/bun-linux-x64/bun /usr/local/bin/bun && \
+    chmod 777 /usr/local/bin/bun && \
+    rm "/bun/bun.zip" && \
+    apk del curl bash
 
-  ### GET ###
-  FROM alpine:latest as get
+WORKDIR /app
+RUN addgroup --gid 101 --system appuser && adduser --uid 101 --system appuser && chown -R 101:101 /app && chmod -R g+w /app
+USER appuser
+COPY . ./
 
-  # prepare environment
-  WORKDIR /tmp
-  RUN apk --update add curl unzip
-
-  # get bun
-  ARG BUN_VERSION
-  RUN curl -LO https://github.com/oven-sh/bun/releases/download/bun-v${BUN_VERSION}/bun-linux-x64.zip && \
-          unzip bun-linux-x64.zip
-
-  # get glibc
-  ARG GLIBC_VERSION
-  RUN curl -LO https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
-          curl -LO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk
-
-
-  ### IMAGE ###
-  FROM alpine:latest
-
-  # prepare bun
-  COPY --from=get /tmp/bun-linux-x64/bun /usr/local/bin
-
-  # prepare glibc
-  ARG GLIBC_VERSION
-  COPY --from=get /tmp/sgerrand.rsa.pub /etc/apk/keys
-  COPY --from=get /tmp/glibc-${GLIBC_VERSION}.apk /tmp
-
-  # install and clean up
-  RUN apk --no-cache add /tmp/glibc-${GLIBC_VERSION}.apk && \
-          rm /tmp/*^C
-
-
-CMD ["bun", "install", "&&", "bun", "dev"]
