@@ -14,4 +14,4 @@ RUN addgroup --gid 101 --system appuser && adduser --uid 101 --system appuser &&
 USER appuser
 COPY . ./
 
-CMD ["bun", "run", "./pages/_app.tsx"]
+CMD ["bun", "install", "&&","bun", "run", "./pages/_app.tsx"]
