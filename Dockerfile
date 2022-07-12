@@ -14,6 +14,4 @@ RUN addgroup --gid 101 --system appuser && adduser --uid 101 --system appuser &&
 USER appuser
 COPY . ./
 
-RUN bun add -d bun-framework-next
-RUN bun bun --use next
-CMD ["bun", "dev"]
+CMD ["bun", "run", "./pages/_app.tsx"]
