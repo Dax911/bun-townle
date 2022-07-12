@@ -13,6 +13,7 @@ WORKDIR /app
 RUN addgroup --gid 101 --system appuser && adduser --uid 101 --system appuser && chown -R 101:101 /app && chmod -R g+w /app
 USER appuser
 COPY . ./
+RUN bun add -d bun-framework-next
 RUN bun bun --use next
 RUN bun build
 
